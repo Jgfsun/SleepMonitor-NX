@@ -338,6 +338,8 @@ def run_program(hparams, FLAGS):
                     'fs': sample_rate
                 }
                 filename = "{:02d}".format(j) + "eeg_data.npz"
+                if (os.path.exists('results') == False):
+                    os.mkdir('results')
                 save_file = os.path.join("./results", filename)
                 np.savez(save_file, **save_dict)
                 print("save success!")
