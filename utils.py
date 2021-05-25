@@ -115,17 +115,19 @@ def sample_arr(sample, channel=1):
 
 def filter(data):
     data = np.array(data)
-    # filter_detrend = signal.detrend(data)   # baseline drift
+    filter_detrend = signal.detrend(data)   # baseline drift
     notch_b, notch_a = signal.iirnotch(0.4, 30.0)
-    filter_data_1 = signal.filtfilt(notch_b, notch_a, data)
-    b, a = signal.butter(8, [0.008, 0.8], btype='bandpass', analog=False)  # 1Hz-100Hz
+    filter_data_1 = signal.filtfilt(notch_b, notch_a, filter_detrend)
+    b, a = signal.butter(8, [0.004, 0.4], btype='bandpass', analog=False)  # 0.5-50Hz
     filter_data_2 = signal.filtfilt(b, a, filter_data_1)  # numpy.ndarray
     data_list = filter_data_2.tolist()  # list
     return data_list
 
 
 def down_sample(data_list):
-    """the data_list length is 7500(30s epoch)"""
+    """the data_list length is 7500(30s epoch)
+        Have been abandoned
+    """
     data = np.zeros(3000)
     matrix = np.array([[1.0 / 3, 0], [1.0 / 3, 0], [1.0 / 6, 1.0 / 6], [0, 1.0 / 3], [0, 1.0 / 3]])
 
