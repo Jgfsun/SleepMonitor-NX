@@ -7,7 +7,8 @@ from ui4 import Ui_form
 import pyqtgraph as pg
 from utils import epoch_buffer
 
-moved_length = 2
+moved_length = 2  # 每次移动的点数，即刷新率。需要更改定时器定时的时间。
+
 
 class MainDialogImgBW(QMainWindow, Ui_form):
     def __init__(self):
@@ -46,8 +47,8 @@ class MainDialogImgBW(QMainWindow, Ui_form):
         self.timer_re.timeout.connect(self.plotData)
 
     def init_F(self):
-        set_left = pg.AxisItem('left', pen='y',  maxTickLength=-5)
-        set_bottom = pg.AxisItem('bottom', pen='y',  maxTickLength=-5)
+        set_left = pg.AxisItem('left', pen='y', maxTickLength=-5)
+        set_bottom = pg.AxisItem('bottom', pen='y', maxTickLength=-5)
         p = self.F.addPlot(row=0, col=0, axisItems={'left': set_left, 'bottom': set_bottom})  # 新建一个子图
         # p2 = self.F.addPlot(row=1, col=0)
         # p.showGrid(x=True, y=True)
@@ -61,8 +62,8 @@ class MainDialogImgBW(QMainWindow, Ui_form):
         self.curve1 = p.plot(pen="r", name="channel 1")
 
     def init_RW(self):
-        set_left = pg.AxisItem('left', pen='y',  maxTickLength=-5)
-        set_bottom = pg.AxisItem('bottom', pen='y',maxTickLength=-5)
+        set_left = pg.AxisItem('left', pen='y', maxTickLength=-5)
+        set_bottom = pg.AxisItem('bottom', pen='y', maxTickLength=-5)
         p2 = self.RW.addPlot(row=0, col=0, axisItems={'left': set_left, 'bottom': set_bottom})  # 新建一个子图
         # p2.showGrid(x=True, y=True)
         p2.setRange(yRange=(-50, 50), xRange=(10, 380), disableAutoRange=True)  # 设置坐标轴刻度范围
@@ -77,7 +78,7 @@ class MainDialogImgBW(QMainWindow, Ui_form):
 
     def init_FFT(self):
         set_left = pg.AxisItem('left', pen='y', maxTickLength=-5)
-        set_bottom = pg.AxisItem('bottom', pen='y',maxTickLength=-5)
+        set_bottom = pg.AxisItem('bottom', pen='y', maxTickLength=-5)
         p3 = self.FFT.addPlot(row=0, col=0, axisItems={'left': set_left, 'bottom': set_bottom})  # 新建一个子图
         # p2.showGrid(x=True, y=True)
         p3.setRange(yRange=(-0, 10), xRange=(0, 100), disableAutoRange=True)  # 设置坐标轴刻度范围
@@ -89,8 +90,8 @@ class MainDialogImgBW(QMainWindow, Ui_form):
 
     def plotData(self):
         if epoch_buffer.get_data_state(self.i, moved_length):  #
-        # try:
-            x, sample_rate = epoch_buffer.get_data(400, moved_length, 400/moved_length, self.i)
+            # try:
+            x, sample_rate = epoch_buffer.get_data(400, moved_length, 400 / moved_length, self.i)
             self.curve1.setData(x)
 
             seta_x = epoch_buffer.get_filter_rhythm(4, 8)
@@ -124,7 +125,6 @@ class MainDialogImgBW(QMainWindow, Ui_form):
 
 
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
     main = MainDialogImgBW()
     main.show()

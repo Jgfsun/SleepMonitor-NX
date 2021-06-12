@@ -8,7 +8,7 @@ def save_data():
     print("looking for an EEG stream...")
     streams = resolve_stream('type', 'EEG')
     # create a new inlet to read from the stream
-    # here the streams[0] means select the first stream  in the streams
+    # here the streams[0] means select the first stream in the streams
     inlet = StreamInlet(streams[0], max_buflen=60)
     start_state = True
     # global start_state

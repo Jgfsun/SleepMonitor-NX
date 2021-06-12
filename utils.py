@@ -14,7 +14,7 @@ class EpochBuffer:
         self.fixed_list = [0 for i in range(fixed_length + 10)]
         self.blank = [0 for i in range(10)]
 
-    def set(self, data, label, sample_rate):
+    def set(self, data, label, sample_rate):  # 存储数据
         if len(self.buffer) == 0:
             self.buffer = self.buffer + data
         else:
@@ -24,22 +24,22 @@ class EpochBuffer:
         self.sample_rate = sample_rate
         return None
 
-    def set_raw_data(self, data):
+    def set_raw_data(self, data):  # 存储数据
         self.buffer = self.buffer + data
         return None
 
-    def set_data(self, data):
+    def set_data(self, data):  # 存储下采样数据
         self.buffer_2 = self.buffer_2 + data
         return None
 
-    def set_label(self, label):
+    def set_label(self, label):  # 存储预测结果
         self.labels = self.labels + label
 
     def get_raw_data(self, index):
         # 过滤前10s，防止初始干扰
         return self.buffer[index * 250 + 2500: index * 250 + 10000]
 
-    def get_raw_data_state(self, index):
+    def get_raw_data_state(self, index):  # 获取数据状态
         if len(self.buffer) >= 2500 + index * 250 + 7500:
             return True
         else:
@@ -115,7 +115,7 @@ def sample_arr(sample, channel=1):
 
 def filter(data):
     data = np.array(data)
-    filter_detrend = signal.detrend(data)   # baseline drift
+    filter_detrend = signal.detrend(data)  # baseline drift
     notch_b, notch_a = signal.iirnotch(0.4, 30.0)
     filter_data_1 = signal.filtfilt(notch_b, notch_a, filter_detrend)
     b, a = signal.butter(8, [0.004, 0.4], btype='bandpass', analog=False)  # 0.5-50Hz
